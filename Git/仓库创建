@@ -1,0 +1,10 @@
+
+(1) 创建本地仓库
+    git init
+
+(2) 首次将本地仓库推送至Github
+    git push --set-upstream origin master
+
+(3)
+
+(4)

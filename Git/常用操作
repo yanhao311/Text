@@ -1,0 +1,6 @@
+
+(1) 克隆仓库
+    git clone https://github.com/yanhao311/Doc.git
+
+(2) 拉取文件
+    git pull https://github.com/yanhao311/Doc.git master
