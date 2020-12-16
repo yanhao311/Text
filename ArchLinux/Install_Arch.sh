@@ -5,16 +5,71 @@
 #   1）pacman -Sy git
 #   2）git config --global user.name "yanhao311"
 #   3）git config --global user.email "yanhao311@126.com"
-#   3) git clone --recursive https://github.com/yanhao311/Doc
+#   3) git clone https://github.com/yanhao311/Text.git
+# 3. 检查磁盘是否为256GB，磁盘名称是否为sda：  fdisk -l
+#    使用fdisk命令删除所有的磁盘分区
+#    如果不需要分区，那么
 
 # 更新系统时间
 timedatectl set-ntp true
 
-# 分配磁盘（默认256GB）
+# 默认磁盘256GB，磁盘名称sda
 objDisk=/dev/sda
-# 分配swap
-echo -e "n\np\n1\n2048\n8390656\nw\n" | fdisk $objDisk
-# 配系统磁盘
+# 分配swap（2048为FirstSector, swap划分8GB=(16779263-2947)*512）
+echo -e "n\np\n1\n2048\n16779263\nw\n" | fdisk $objDisk
+# 分配配系统磁盘
 echo -e "n\np\n2\n\n\nw\n" | fdisk $objDisk
 
 # 格式化磁盘
+mkswap /dev/sda1
+mkfs.ext4 /dev/sda2
+
+# 挂载
+mount /dev/sda2 /mnt
+# 启动交换分区
+swapon /dev/sda1
+
+# 变更镜像源
+cp ./mirrorlist /etc/pacman.d/mirrorlist
+# 同步本地数据
+pacman -Syy
+
+# 安装 base 软件包和 Linux 内核以及常规硬件的固件
+pacstrap -i /mnt base base-devel linux linux-firmware
+
+# 配置系统
+genfstab -U /mnt >> /mnt/etc/fstab
+# 进入新系统
+arch-chroot /mnt
+# 设置时区
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+hwclock --systohc --utc
+# 设置本地语言（首次安装后补充）
+# 设置网络
+# 设置root密码
+echo "\n\n\n设置root密码\n\n"
+passwd
+
+# 安装配置引导系统
+pacman -S grub
+grub-install /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+
+# 安装git，并配置
+pacman -Sy git
+git config --global user.name "yanhao311"
+git config --global user.email "yanhao311@126.com"
+git config --global core.quotepath false
+
+# 退出新系统
+exit
+# 卸载
+umount -R /mnt
+# 关机
+echo "/n/n/n已完成安装，计算机马上关闭，下次启动时请移除安装介质"
+for Cnt in {3...0};do
+    echo $Cnt
+    sleep 1
+done
+shutdown -h now
+
