@@ -1,0 +1,17 @@
+
+(1) 克隆仓库
+    git clone https://github.com/yanhao311/Doc.git
+
+(2) 拉取文件(更新本地)
+    git pull https://github.com/yanhao311/Doc.git master
+
+(3) 提交修改
+    a) 添加修改文件或者文件夹 
+        git add Git/下载与提交
+        git add Git/ 
+
+    b) 提交修改
+        git commit -m "提交说明必须填写"
+        
+    c) 推送至服务器（master分支）
+        git push origin master

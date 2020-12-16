@@ -1,0 +1,177 @@
+
+====================Git 基本操作=====================
+
+1. 在需要版本控制的目录下执行命令：
+   git int
+   那么，一个Git仓库就创建成功了。
+
+2. 在一个Git仓库目录下输入命令：
+   git add a.txt
+   此时，a.txt文件被添加到仓库的暂存区。
+
+3. 在一个Git仓库目录下输入命令：
+   git commit -m "提交一个新文件a.txt"
+   该命令将提交所有的更新。即，将暂存区中的内容提交到分支（默认master分支）
+
+4. 在一个Git仓库目录下输入命令：
+   git status
+   可以看到仓库当前状态，例如哪些文件未被追踪，哪些文件没有提交等
+
+5. 在一个Git仓库目录下输入命令：
+   git diff  
+   可以查看当前目录下打文件和仓库中的文件有何不同。当然，仅能对比加入到Git库中的文件
+
+6. 在一个Git仓库目录下输入命令：
+   git log 
+   可以显示从最近到最远的提交日志
+
+===================Git 版本回滚======================
+
+1.简单回滚
+  （1）首先通过git log 查看提交日志，根据描述信息选择需要回滚的版本
+  （2）输入命令回滚: git reset --hard HEAD^ 或者 git reset --hard HEAD~1
+  
+   HEAD代表仓库中最新的版本，也就是git log中看到的第一条提交日志。
+   HEAD^代表最新版本打上一个版本
+   一旦回滚，git log也将随之回滚到老版本
+
+2.回滚恢复
+  如果回滚后后悔了，可以通过版本ID回滚到任意版本
+  git reset --hard 1094a
+  其中，1094a为ID的前几位。可以输入任意几位，只要能区分即可，也可以输入完整的ID
+
+  如何获取版本ID？使用 git reflog 命令即可查看完整的日志信息
+
+
+3.撤销修改
+当修改了文件后，想要放弃修改，那么可以使用命令
+  git checkout -- file_name
+如果暂存区中没有暂存版本，那么将恢复到版本库中最新的版本;
+如果暂存区中存在暂存版本，那么将回复到暂存版本。
+
+4.撤销暂存区版本
+使用版本回退可以删除暂存区中的版本
+  git reset HEAD file_name
+
+5.文件删除与恢复
+从版本库中删除文件
+  git rm file_name
+然后提交
+  git commit -m "remove file_name"
+
+如果意外删除了工作区中的版本，直接使用git checkout -- 命令回复为最新版本即可。
+
+===================远程Git仓库=====================
+
+1.关联远程仓库
+使用一下命令进行关联
+  git remote add origin git@server-name:path/repo-name.git
+例如，关联自己的github仓库
+  git remote add origin git@github.com:yanhao311/Doc.git
+
+2.推送修改
+如果是首次推送（需要推送master分支所有内容），那么使用命令
+  git push --set-upstream origin master
+使用一下命令推送最新修改
+  git push origin master
+
+3.克隆
+开始一个项目时，通常首先在github上创建一个仓库，然后克隆下来。
+  git clone git@github.com:yanhao311/Doc.git
+执行完上述操作后，目录会新增一个Doc文件夹。
+
+
+==================git分支======================
+
+1.创建/切换分支
+创建dev分支
+  git branch dev
+切换到dev分支
+  git checkout dev
+创建并切换分支
+  git checkout -b dev
+
+2. 查看分支
+  git branch
+
+3. 合并分支
+将某个分支合并到当前分支：
+  git merge dev
+
+如果master也修改量，dev分支也修改了，dev的文件不是master文件的增量
+那么，此时就必须修改某个文件，使dev的文件和master的文件相同，或者dev的文件内容包含master的文件内容
+
+合并分支时，加上 --no-ff 参数可以防止删除分支后丢失分支内容。
+  git merge --no-ff -m "merge with no-ff" dev
+
+4. 删除分支
+  git brand -d dev
+如果想要丢弃一个没有被合并过的分支，可以使用以下命令
+  git branch -D dev
+
+5. 推送分支
+将远程分支创建到本地
+  git checkout -b dev origin/dev
+将本地分支推送到远端
+  git push origin dev
+设置本地分支和远程分支的链接
+  git branch --set-upstream-to=origin/dev dev
+从远程获取分支最新数据并与本地合并
+  git pull
+
+多人协作的工作模式
+首先，可以试图用git push origin <branch-name>推送自己的修改；
+如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+如果合并有冲突，则解决冲突，并在本地提交；
+没有冲突或者解决掉冲突后，再用git push origin <branch-name>推送就能成功！
+如果git pull提示no tracking information，则说明本地分支和远程分支的链接关系没有创建，用命令git branch --set-upstream-to <branch-name> origin/<branch-name>
+
+6. 工作区保存
+当前工作到一半，需要在上个版本基础上修改bug，
+那么可以先保存当前的工作区，然后创建分支修改bug，然后再合并分支，删除bug分支
+最后，回恢复工作区即可
+
+保存工作区
+  git stash
+查看保存的工作区
+  git stash list
+恢复工作区
+  git stash apply stash@{0}
+丢弃保存的工作区
+  git stash drop stash@{0}
+或者，可以直接恢复的同时删除保存工作区
+  git stash pop
+
+7. 关于分支的说明
+在某个分支下修改文件后，切换到另一个分支，当前工作区中的文件也会改变！！
+有一点值得注意，切换分支时，必须提交(commit)修改的文件！
+因此，推荐使用分支修改文件，然后合并分支。
+
+分支策略：
+首先，master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；
+干活都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；
+你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上合并就可以了。
+不管是修改bug还是添加新特性，最好都先新建分支，然后再合并分支。
+推送到远端的分支一般是主分支和协作分支。bug分支等不需要推送到远端
+
+==========================标签===============================
+
+首先切换到需要打标签的分支，然后执行命令
+  git tag V0.1
+默认标签打在最新提交的commit上。为历史提交打标签
+  git tag V0.1 f52c633
+使用标签显示提交信息
+  git show V0.1
+创建标签时添加说明
+  git tag -a V0.1 -m “标签说明” f52c633
+删除标签
+  git tag -d V0.1
+使用标签推送
+  git push origin V0.1
+
+
+===================常见问题解决办法==================
+
+1. Git bash中文全部显示为 \347\256\227\346\263\225.txt
+
+执行语句： git config --global core.quotepath false
