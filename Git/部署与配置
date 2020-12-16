@@ -7,3 +7,16 @@
 
 (3) 设置邮箱
     git config --global user.email "email"
+
+(4) 设置本机提交权限
+    a) 生成SSH秘钥（公钥+私钥）：使用默认存储路径(不建议设置密码)
+        ssh-keygen -t rsa -C "yanhao311@126.com"
+
+    b) 将公钥 "id_rsa.pub" 文件上传至Github
+
+    c) 新电脑将私钥存放在相应位置即可
+        win: C:\Users\Administrator\.ssh\id_rsa
+        linux: /home/用户文件夹/.ssh/id_rsa
+
+(5) 中文乱码
+    git config --global core.quotepath false
