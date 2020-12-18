@@ -45,44 +45,17 @@ echo "************ Config System*************"
 sleep 5
 genfstab -U /mnt >> /mnt/etc/fstab
 
-# 进入新系统
+# 进入新系统, 并在新系统中执行脚本
 echo "************ Enter System*************"
 sleep 5
-arch-chroot /mnt
-# 设置时区
-echo "************ SetTime *************"
-sleep 5
-ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-hwclock --systohc --utc
-# 设置本地语言（首次安装后补充）
-# 设置网络
-# 设置root密码
-echo "************ SetPassword *************"
-sleep 5
-echo "\n\n\n Set Root Password\n\n"
-passwd
+cp ./InstallArch_Chroot.sh /mnt/home/InstallArch_Chroot.sh
+arch-chroot /mnt chmod 777 /home/InstallArch_Chroot.sh
+arch-chroot /mnt /home/InstallArch_Chroot.sh
+# 退出新系统，删除脚本文件
+rm /home/InstallArch_Chroot.sh
 
-echo "************ Install Grub *************"
-sleep 5
-# 安装配置引导系统
-pacman -S grub
-grub-install /dev/sda
-grub-mkconfig -o /boot/grub/grub.cfg
-
-
-echo "************ Install Software *************"
-sleep 5
-# 安装git，并配置
-pacman -Sy git
-git config --global user.name "yanhao311"
-git config --global user.email "yanhao311@126.com"
-git config --global core.quotepath false
-
-# 退出新系统
-exit
-# 卸载
+# 退出安装并关机
 umount -R /mnt
-# 关机
 echo "/n/n/n Install Complete, System will shutdown in 5sec"
 for Cnt in {3...0};do
     echo $Cnt
