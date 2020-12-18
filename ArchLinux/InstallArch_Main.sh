@@ -52,7 +52,7 @@ cp ./InstallArch_Chroot.sh /mnt/home/InstallArch_Chroot.sh
 arch-chroot /mnt chmod 777 /home/InstallArch_Chroot.sh
 arch-chroot /mnt /home/InstallArch_Chroot.sh
 # 退出新系统，删除脚本文件
-rm /home/InstallArch_Chroot.sh
+rm /mnt/home/InstallArch_Chroot.sh
 
 # 退出安装并关机
 umount -R /mnt
