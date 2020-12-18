@@ -59,7 +59,7 @@ hwclock --systohc --utc
 # 设置root密码
 echo "************ SetPassword *************"
 sleep 5
-echo "\n\n\n设置root密码\n\n"
+echo "\n\n\n Set Root Password\n\n"
 passwd
 
 echo "************ Install Grub *************"
