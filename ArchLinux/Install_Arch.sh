@@ -10,58 +10,68 @@
 #    使用fdisk命令删除所有的磁盘分区
 #    如果不需要分区，那么
 
+
 # 更新系统时间
 timedatectl set-ntp true
 
+echo "************ Deal With Disk*************"
+sleep 5
 # 默认磁盘256GB，磁盘名称sda
 objDisk=/dev/sda
 # 分配swap（2048为FirstSector, swap划分8GB=(16779263-2947)*512）
 echo -e "n\np\n1\n2048\n16779263\nw\n" | fdisk $objDisk
 # 分配配系统磁盘
 echo -e "n\np\n2\n\n\nw\n" | fdisk $objDisk
-
 # 格式化磁盘
 mkswap /dev/sda1
 mkfs.ext4 /dev/sda2
-
 # 挂载
 mount /dev/sda2 /mnt
 # 启动交换分区
 swapon /dev/sda1
 
+
+echo "************ Install System*************"
+sleep 5
 # 变更镜像源
 cp ./mirrorlist /etc/pacman.d/mirrorlist
 # 同步本地数据
 pacman -Syy
-
-echo "开始安装系统"
-
 # 安装 base 软件包和 Linux 内核以及常规硬件的固件
 pacstrap /mnt base base-devel linux linux-firmware
 
-echo "准备配置系统"
-
 # 配置系统
+echo "************ Config System*************"
+sleep 5
 genfstab -U /mnt >> /mnt/etc/fstab
 
-echo "进入新系统"
-
 # 进入新系统
+echo "************ Enter System*************"
+sleep 5
 arch-chroot /mnt
 # 设置时区
+echo "************ SetTime *************"
+sleep 5
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 hwclock --systohc --utc
 # 设置本地语言（首次安装后补充）
 # 设置网络
 # 设置root密码
+echo "************ SetPassword *************"
+sleep 5
 echo "\n\n\n设置root密码\n\n"
 passwd
 
+echo "************ Install Grub *************"
+sleep 5
 # 安装配置引导系统
 pacman -S grub
 grub-install /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 
+
+echo "************ Install Software *************"
+sleep 5
 # 安装git，并配置
 pacman -Sy git
 git config --global user.name "yanhao311"
@@ -73,7 +83,7 @@ exit
 # 卸载
 umount -R /mnt
 # 关机
-echo "/n/n/n已完成安装，计算机马上关闭，下次启动时请移除安装介质"
+echo "/n/n/n Install Complete, System will shutdown in 5sec"
 for Cnt in {3...0};do
     echo $Cnt
     sleep 1
