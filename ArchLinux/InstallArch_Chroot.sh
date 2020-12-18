@@ -13,7 +13,7 @@ echo "/n/n\n Set Root Password\n\n"
 passwd
 
 # 退出新系统
-exit
+# exit
 
 
 # 设置时区
