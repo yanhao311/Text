@@ -34,11 +34,18 @@ cp ./mirrorlist /etc/pacman.d/mirrorlist
 # 同步本地数据
 pacman -Syy
 
+echo "开始安装系统"
+
 # 安装 base 软件包和 Linux 内核以及常规硬件的固件
-pacstrap -i /mnt base base-devel linux linux-firmware
+pacstrap /mnt base base-devel linux linux-firmware
+
+echo "准备配置系统"
 
 # 配置系统
 genfstab -U /mnt >> /mnt/etc/fstab
+
+echo "进入新系统"
+
 # 进入新系统
 arch-chroot /mnt
 # 设置时区
