@@ -56,10 +56,5 @@ rm /mnt/home/InstallArch_Chroot.sh
 
 # 退出安装并关机
 umount -R /mnt
-echo "/n/n/n Install Complete, System will shutdown in 5sec"
-for Cnt in {3...0};do
-    echo $Cnt
-    sleep 1
-done
 shutdown -h now
 
