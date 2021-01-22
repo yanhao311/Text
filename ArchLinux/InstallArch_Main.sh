@@ -14,8 +14,8 @@
 # 更新系统时间
 timedatectl set-ntp true
 
-echo "************ Deal With Disk*************"
-sleep 5
+echo "************ Deal With Disk *************"
+sleep 3
 # 默认磁盘256GB，磁盘名称sda
 objDisk=/dev/sda
 # 分配swap（2048为FirstSector, swap划分8GB=(16779263-2947)*512）
@@ -31,8 +31,8 @@ mount /dev/sda2 /mnt
 swapon /dev/sda1
 
 
-echo "************ Install System*************"
-sleep 5
+echo "************ Install System *************"
+sleep 3
 # 变更镜像源
 cp ./mirrorlist /etc/pacman.d/mirrorlist
 # 同步本地数据
@@ -41,20 +41,22 @@ pacman -Syy
 pacstrap /mnt base base-devel linux linux-firmware
 
 # 配置系统
-echo "************ Config System*************"
-sleep 5
+echo "************ Gen Config File *************"
+sleep 3
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # 进入新系统, 并在新系统中执行脚本
-echo "************ Enter System*************"
-sleep 5
-cp ./InstallArch_Chroot.sh /mnt/home/InstallArch_Chroot.sh
-arch-chroot /mnt chmod 777 /home/InstallArch_Chroot.sh
-arch-chroot /mnt /home/InstallArch_Chroot.sh
+echo "************ Enter System *************"
+sleep 3
+cp -r ./ /mnt/home/InstallScript
+arch-chroot /mnt chmod 777 -R /home/InstallScript
+arch-chroot /mnt /home/InstallScript/InstallArch_Chroot.sh
 # 退出新系统，删除脚本文件
-rm /mnt/home/InstallArch_Chroot.sh
+rm -r /mnt/home/InstallScript
 
 # 退出安装并关机
+echo "************ Exit System And Shutdown *************"
+sleep 3
 umount -R /mnt
 shutdown -h now
 

@@ -1,4 +1,12 @@
 
+echo "************ Config System *************"
+sleep 3
+
+# 设置镜像源
+cp ./mirrorlist /etc/pacman.d/mirrorlist
+# 安装sed工具
+pacman -S --noconfirm vim
+
 # 设置时区
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 hwclock --systohc --utc
@@ -6,6 +14,7 @@ hwclock --systohc --utc
 sed 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.conf
 sed 's/#zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.conf
 locale-gen
+
 # 设置网络
 echo "yanhaoArch" > /etc/hostname
 echo "127.0.0.1	localhost" >> /etc/hosts
@@ -21,3 +30,4 @@ passwd yanhao
 chmod 777 /etc/sudoers
 sed -i "/root ALL=(ALL) ALL/a\yanhao ALL=(ALL) ALL" /etc/sudoers
 chmod 440 /etc/sudoers
+

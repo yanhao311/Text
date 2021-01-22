@@ -1,14 +1,19 @@
-# 基本工具
-pacman -S --noconfirm sed vim
 
-# 网络管理器
+
+echo "************ Install Software *************"
+sleep 3
+
+# 安装基本工具
+pacman -S --noconfirm vim
+
+# 安装并配置网络管理器
 pacman -S --noconfirm dhcp networkmanager iproute2
 sudo systemctl enable NetworkManager
 
-# 声卡驱动
-pacman -S alsa-utils
-# 显卡驱动
-pacman -S alsa-utils
+# 安装并配置声卡驱动
+pacman -S --noconfirm alsa-utils
+# 安装并配置显卡驱动
+pacman -S --noconfirm xf86-video-vmware
 
 # 桌面环境
 pacman -S --noconfirm xorg xorg-xrandr deepin
