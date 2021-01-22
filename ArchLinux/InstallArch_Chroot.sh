@@ -2,13 +2,13 @@
 echo "************ Install Grub *************"
 sleep 3
 # 安装配置引导系统
-pacman -S grub
+pacman -S --noconfirm grub
 grub-install /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # 配置
-./InstallArch_Config.sh
+/home/InstallScript/InstallArch_Config.sh
 
 # 安装软件
-./InstallArch_Software.sh
+/home/InstallScript/InstallArch_Software.sh
 
