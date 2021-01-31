@@ -21,9 +21,11 @@ pacman -S --noconfirm wqy-zenhei
 # KDE桌面环境
 pacman -S --noconfirm xorg xorg-xrandr plasma plasma-wayland-session
 systemctl enable sddm.service
-# 配置分辨率
+# 基本软件
+pacman -S --noconfirm dolphin konsole
+# 配置分辨率(显卡控制器选择VBoxSVGA，安装增强功能，下面两行可不配)
 echo "xrandr --newmode \"1920x1080_60.00\" 173.00 1920 2048 2248 2576 1080 1083 1088 1120 -hsync +vsync" >> /etc/profile
-echo "xrandr --addmode Virtual1 \"1920x1080_60.00\"" >> /etc/profile
+echo "xrandr --addmode Virtual-1 \"1920x1080_60.00\"" >> /etc/profile
 
 # 安装配置git
 pacman -S --noconfirm git
