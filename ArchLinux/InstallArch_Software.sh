@@ -13,24 +13,17 @@ sudo systemctl enable NetworkManager
 # 安装并配置声卡驱动
 pacman -S --noconfirm alsa-utils
 # 安装并配置显卡驱动
-pacman -S --noconfirm xf86-video-vmware
+pacman -S --noconfirm xf86-video-vesa
 
 # 中文字体
 pacman -S --noconfirm wqy-zenhei
 
-# deepin桌面环境
-# pacman -S --noconfirm xorg xorg-xrandr deepin
-# sed 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-deepin-greeter/g' /etc/lightdm/lightdm.conf
-# systemctl enable lightdm
 # KDE桌面环境
-pacman -S xorg plasma plasma-wayland-session
+pacman -S --noconfirm xorg xorg-xrandr plasma plasma-wayland-session
 systemctl enable sddm.service
 # 配置分辨率
 echo "xrandr --newmode \"1920x1080_60.00\" 173.00 1920 2048 2248 2576 1080 1083 1088 1120 -hsync +vsync" >> /etc/profile
 echo "xrandr --addmode Virtual1 \"1920x1080_60.00\"" >> /etc/profile
-
-# 命令行工具
-pacman -S --noconfirm yakuake
 
 # 安装配置git
 pacman -S --noconfirm git

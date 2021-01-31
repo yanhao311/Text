@@ -11,4 +11,3 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 # 安装软件
 /home/InstallScript/InstallArch_Software.sh
-
